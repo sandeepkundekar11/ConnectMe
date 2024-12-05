@@ -26,7 +26,7 @@ const Navbar = () => {
     };
   }, [showProfilePopup]);
   return (
-    <div className="w-screen h-[4.5rem] bg-white shadow-md flex fixed top-0">
+    <div className="w-screen h-[4.5rem] bg-white border flex fixed top-0 z-50">
       <div className="h-full w-20 border pl-2 p-3 flex justify-center items-center">
         <img src={chatHomeImg} alt="" />
       </div>

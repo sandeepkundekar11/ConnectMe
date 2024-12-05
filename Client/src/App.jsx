@@ -7,6 +7,7 @@ const LoginPage = React.lazy(() => import("./Pages/MainPage/LoginPage"));
 const PrivateComponent = React.lazy(() =>
   import("./Pages/HelperPages/PrivateComponent")
 );
+const Home = React.lazy(() => import("./Pages/MainPage/Home"));
 const App = () => {
   return (
     <Suspense fallback={<h1>Loading...</h1>}>
@@ -17,7 +18,7 @@ const App = () => {
           {/* private Routes */}
 
           <Route path="/" element={<PrivateComponent />}>
-            <Route path="/home" element={<h1>hello</h1>} />
+            <Route path="/" element={<Home />} />
           </Route>
         </Routes>
       </BrowserRouter>
