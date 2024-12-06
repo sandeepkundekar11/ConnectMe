@@ -1,7 +1,8 @@
 import SidebarUserContact from "./SidebarUserContact";
 
 /* eslint-disable react/jsx-key */
-const SideBar = () => {
+// eslint-disable-next-line react/prop-types
+const SideBar = ({onAddGroup,onAddUser}) => {
   return (
     <div className="md:w-96 h-[calc(100vh-4.5rem)] bg-white md:static fixed top-[4.5rem] w-full border-t border shadow-xl z-40 ">
       {/* head */}
@@ -10,7 +11,7 @@ const SideBar = () => {
           Chats
         </h1>
         <div className="flex">
-          <button className=" flex items-center  font-medium text-gray-600">
+          <button className=" flex items-center  font-medium text-gray-600" onClick={onAddUser}>
             <svg
               xmlns="http://www.w3.org/2000/svg"
               viewBox="0 0 16 16"
@@ -22,7 +23,7 @@ const SideBar = () => {
             </svg>
             <p className="pl-1 hover:text-blue-500">User</p>
           </button>
-          <button className=" font-medium ml-4 flex items-center text-gray-600">
+          <button className=" font-medium ml-4 flex items-center text-gray-600" onClick={onAddGroup}>
             <svg
               xmlns="http://www.w3.org/2000/svg"
               viewBox="0 0 16 16"
