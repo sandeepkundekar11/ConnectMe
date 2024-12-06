@@ -1,9 +1,13 @@
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import AiChatImg from "../../assets/AiChat.png";
 import chatHomeImg from "../../assets/chatHome.png";
 import SingleChat from "../../assets/SingleChat.png";
 const Navbar = () => {
   const [showProfilePopup, setShowProfilePopup] = useState(false);
+  const navigate = useNavigate()
+  const path = window.location.pathname;
+
 
   useEffect(() => {
     const OutsideClick = (event) => {
@@ -33,12 +37,19 @@ const Navbar = () => {
 
       <div className="flex h-full items-center ml-6 space-x-6 w-3/4">
         {/* chat icon */}
-        <button className="w-[3rem] h-[3rem] bg-gray-200 rounded-full p-2 hover:bg-gray-300 transition-all">
+        <button className={`${path==="/" ? "bg-slate-300":"bg-gray-200 "} w-[3rem] h-[3rem] rounded-full p-2 hover:bg-gray-300 transition-all"`} onClick={() => {
+          navigate("/")
+        }
+        }>
           <img src={SingleChat} alt="" />
         </button>
 
         {/* Ai chat icons */}
-        <button className="w-[3rem] h-[3rem] bg-gray-200 rounded-full p-2 hover:bg-gray-300 transition-all">
+        <button className={` ${path==="/Aichat"?"bg-slate-300":"bg-gray-200"} w-[3rem] h-[3rem]  rounded-full p-2 hover:bg-gray-300 transition-all`}onClick={()=>
+          {
+            navigate("/Aichat")
+          }
+        }>
           <img src={AiChatImg} alt="" />
         </button>
       </div>
@@ -54,7 +65,12 @@ const Navbar = () => {
           <div className="ProfilePopup w-52 h-auto   absolute bg-white border top-20 right-4 shadow-lg">
             <ul className="list-none p-4 space-y-6">
 
-              <li className="flex items-center cursor-pointer">
+              <li className="flex items-center cursor-pointer" onClick={()=>
+                {
+                  navigate("/profile")
+                  setShowProfilePopup(false)
+                }
+              }>
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="1.3em" height="1.3em" fill="currentColor" className="bi bi-person"><path d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6m2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0m4 8c0 1-1 1-1 1H3s-1 0-1-1 1-4 6-4 6 3 6 4m-1-.004c-.001-.246-.154-.986-.832-1.664C11.516 10.68 10.289 10 8 10s-3.516.68-4.168 1.332c-.678.678-.83 1.418-.832 1.664z"></path></svg>
                 <p className="ml-2 hover:text-blue-600 font-medium ">Profile</p>
               </li>

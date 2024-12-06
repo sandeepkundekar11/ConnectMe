@@ -20,3 +20,8 @@
   border-radius: 6px;
   border: 1px solid #f0f0f0; /* Space around the thumb */
 }
+.popup
+{
+  background-color: rgba(173, 173, 173, 0.411);
+  z-index: 999;
+}
