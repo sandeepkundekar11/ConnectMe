@@ -8,7 +8,10 @@ const PrivateComponent = React.lazy(() =>
   import("./Pages/HelperPages/PrivateComponent")
 );
 const Home = React.lazy(() => import("./Pages/MainPage/Home"));
-const ProfilePage=React.lazy(()=>import("./Pages/MainPage/ProfilePage"))
+const ProfilePage = React.lazy(() => import("./Pages/MainPage/ProfilePage"));
+const ChatWithAiPage = React.lazy(() =>
+  import("./Pages/MainPage/ChatWithAiPage")
+);
 const App = () => {
   return (
     <Suspense fallback={<h1>Loading...</h1>}>
@@ -20,7 +23,8 @@ const App = () => {
 
           <Route path="/" element={<PrivateComponent />}>
             <Route path="/" element={<Home />} />
-            <Route path="/profile" element={<ProfilePage/>}/>
+            <Route path="/profile" element={<ProfilePage />} />
+            <Route path="/Aichat" element={<ChatWithAiPage />} />
           </Route>
         </Routes>
       </BrowserRouter>
