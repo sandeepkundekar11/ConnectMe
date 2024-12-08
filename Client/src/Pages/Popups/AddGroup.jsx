@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
-import PopupProvider from "./PopUpProvider";
 import { MdOutlineCancel } from "react-icons/md";
+import PopupProvider from "./PopUpProvider";
 
 // eslint-disable-next-line react/prop-types
 const AddGroup = ({ onCancel }) => {
@@ -69,7 +69,7 @@ const AddGroup = ({ onCancel }) => {
 
   return (
     <PopupProvider>
-      <div className="w-[900px] h-[550px] p-4 bg-white shadow-md rounded-md ">
+      <div className="w-[900px] h-[550px] p-4 bg-white shadow-md rounded-md relative">
         <button
           className="bg-white shadow-md hover:bg-slate-100 rounded-full absolute right-0 -mt-4 -mr-2"
           onClick={onCancel}
