@@ -1,6 +1,7 @@
 const config = require("dotenv").config({ path: "./config.env" })
 const mongoose = require("mongoose")
 const express = require("express")
+const UserRouter = require("./Routes/UserRoutes")
 const { Server } = require("socket.io")
 const { createServer } = require("http")
 const cors = require("cors")
@@ -26,6 +27,10 @@ mongoose.connect(process.env.DATABASE_URL).then(() => {
 }).catch((err) => {
     console.log("mongoose data base connection problem", err.message)
 })
+
+// creating routes
+
+app.use("/user", UserRouter)  // all user routes will come under this `user/`
 
 // listening the ports
 const PORT = process.env.PORT
