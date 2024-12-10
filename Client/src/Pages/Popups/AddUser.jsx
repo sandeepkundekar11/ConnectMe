@@ -5,7 +5,7 @@ import { MdOutlineCancel } from "react-icons/md";
 import ChatUser from "./ChatUser";
 import PopupProvider from "./PopUpProvider";
 
-const AddUser = ({ onCancel }) => {
+const AddUser = ({ onCancel,Users=[] }) => {
   return (
     <PopupProvider>
       <div className="w-96 h-[450px] bg-white rounded-md shadow-lg relative p-4">
@@ -32,7 +32,7 @@ const AddUser = ({ onCancel }) => {
           </div>
           {/* user List */}
           <div className="overflow-auto h-80 mt-2">
-            {[1, 2, 3, 4, 5, 6, 8].map((ele, index) => {
+            {Users?.map((ele, index) => {
               return <ChatUser key={index} />;
             })}
           </div>

@@ -5,6 +5,7 @@ const UserRouter = require("./Routes/UserRoutes")
 const { Server } = require("socket.io")
 const { createServer } = require("http")
 const cors = require("cors")
+const UserChatRouter = require("./Routes/UserChatRoute")
 const app = express()
 const server = createServer(app)
 
@@ -31,6 +32,7 @@ mongoose.connect(process.env.DATABASE_URL).then(() => {
 // creating routes
 
 app.use("/user", UserRouter)  // all user routes will come under this `user/`
+app.use("/add",UserChatRouter)  // all user chat Routes will come user this route "/add"
 
 // listening the ports
 const PORT = process.env.PORT

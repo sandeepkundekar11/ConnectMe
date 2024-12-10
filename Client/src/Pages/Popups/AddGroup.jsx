@@ -2,27 +2,15 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import { MdOutlineCancel } from "react-icons/md";
 import PopupProvider from "./PopUpProvider";
 
-// eslint-disable-next-line react/prop-types
-const AddGroup = ({ onCancel }) => {
+// eslint-disable-next-line react/prop-types, no-unused-vars
+const AddGroup = ({ onCancel,userData=[] }) => {
   const [selectedUser, setSelectedUsers] = useState([]);
   const [searchedName, setSearchedName] = useState("");
-  const arr = [
-    { name: "John Smith" },
-    { name: "Emily Johnson" },
-    { name: "Michael Brown" },
-    { name: "Sarah Davis" },
-    { name: "David Wilson" },
-    { name: "Jessica Miller" },
-    { name: "Chris Garcia" },
-    { name: "Amanda Martinez" },
-    { name: "Andrew White" },
-    { name: "Sophia Hernandez" },
-  ];
   //   above data we will get from api respose
 
   const [usersData, setUsersData] = useState([]);
   useEffect(() => {
-    let users = arr.map((ele) => {
+    let users = userData?.map((ele) => {
       return {
         ...ele,
         selected: false,
@@ -63,7 +51,6 @@ const AddGroup = ({ onCancel }) => {
 
       return ele.name.includes(searchedName);
     });
-    console.log(selectedUsers);
     return selectedUsers;
   }, [searchedName, usersData]);
 

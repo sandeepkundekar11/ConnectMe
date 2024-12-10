@@ -1,10 +1,12 @@
 import { applyMiddleware, combineReducers, createStore } from "redux"
 import { thunk } from "redux-thunk"
+import { GetAllUsersReducer } from "./Reducers/GetAllUserReducer"
 import { JoinUserReducer } from "./Reducers/UserReducer"
 
 
 const rootReducer = combineReducers({
-    joinUserData: JoinUserReducer
+    joinUserData: JoinUserReducer,
+    GetAllUsers: GetAllUsersReducer
 })
 
 
