@@ -1,15 +1,41 @@
-import { memo, useState } from "react";
+import { memo, useEffect, useState } from "react";
 import SideBar from "../HelperPages/SideBar";
 // import ChatSection from "../HelperPages/ChatSection";
-import AddUser from "../Popups/AddUser";
+import { useDispatch, useSelector } from "react-redux";
+import { getAllUsersApiCall } from "../../Redux/Actions/GetAllUserAction";
 import AddGroup from "../Popups/AddGroup";
+import AddUser from "../Popups/AddUser";
 const Home = () => {
   const [typeOfPopup, setTypeOfPopup] = useState("");
+  const Dispatch = useDispatch()
+  // get all GroupUser  and get add user
+  const { AllUsers } = useSelector(state => state.GetAllUsers)
+  const [GroupUsers, setGroupUsers] = useState([])
+  const [getAddUser, setAddUser] = useState([])
+  useEffect(() => {
+    if (typeOfPopup === "addGroup") {
+      Dispatch(getAllUsersApiCall("http://localhost:8000/user/getAllUser/All"))
+    }
+    else if (typeOfPopup === "addUser") {
+      Dispatch(getAllUsersApiCall("http://localhost:8000/user/getAllUser/user"))
+    }
+  }, [typeOfPopup])
+
+  useEffect(() => {
+    setGroupUsers(AllUsers)
+    setAddUser(AllUsers)
+  }, [AllUsers])
+
+  // get All groups and  get add user ends
+
+
+
   const PopupComponents = [
     {
       title: "addUser",
       component: (
         <AddUser
+          Users={getAddUser}
           onCancel={() => {
             setTypeOfPopup("");
           }}
@@ -20,6 +46,7 @@ const Home = () => {
       title: "addGroup",
       component: (
         <AddGroup
+          userData={GroupUsers}
           onCancel={() => {
             setTypeOfPopup("");
           }}
