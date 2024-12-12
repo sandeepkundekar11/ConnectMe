@@ -5,12 +5,12 @@ const GroupSchema = new mongoose.Schema({
     groupname: String,
     admin: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: "user"
+        ref: "User"
     },
     users: [
         {
             type: mongoose.Schema.Types.ObjectId,
-            ref: "user"
+            ref: "User"
         }
     ],
     messages: [
@@ -21,5 +21,5 @@ const GroupSchema = new mongoose.Schema({
     ],
 })
 
-const GroupModel = mongoose.model("group", GroupSchema)
+const GroupModel = mongoose.model("Group", GroupSchema)
 module.exports = GroupModel

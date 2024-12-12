@@ -4,19 +4,15 @@ const MessageSchema = new mongoose.Schema({
     content: String,
     sender: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: "user"
+        ref: "User"
     },
     receiver: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: "user"
+        ref: "User"
     },
     time: {
         type: Date,
         default: Date.now
-    },
-    seen: {
-        type: Boolean,
-        default: false
     }
 })
 
