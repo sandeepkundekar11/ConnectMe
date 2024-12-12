@@ -1,13 +1,13 @@
-const express=require("express")
+const express = require("express")
 const UserAuthentication = require("../Middlerwares/AuthMiddlerware")
-const { AddUser } = require("../Controller/UserChatController")
+const { AddUser, GetAvailableChats } = require("../Controller/UserChatController")
 
-const UserChatRouter=express.Router()
+const UserChatRouter = express.Router()
 
-UserChatRouter.put("/adduser",UserAuthentication,AddUser)  // this route is use to add the user in the users list
+UserChatRouter.put("/adduser", UserAuthentication, AddUser)  // this route is use to add the user in the users list
+UserChatRouter.get("/getChatInfo", UserAuthentication, GetAvailableChats)
 
-
-module.exports=UserChatRouter
+module.exports = UserChatRouter
 
 
 

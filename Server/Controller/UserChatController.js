@@ -1,5 +1,7 @@
 const AsyncHandler = require("express-async-handler")
 const UserModel = require("../Model/UserModel")
+const GroupModel = require("../Model/GroupModel")
+const MessageModel = require("../Model/MessageModel")
 
 // adding user for one to one chatting
 
@@ -42,6 +44,19 @@ const AddUser = AsyncHandler(async (req, res) => {
     }
 })
 
+
+// get user chats and available groups
+
+const GetAvailableChats = AsyncHandler(async (req, res) => {
+    try {
+
+
+    } catch (error) {
+        return res.status(500).json({ message: error.message })
+    }
+})
+
 module.exports = {
-    AddUser
+    AddUser,
+    GetAvailableChats
 }

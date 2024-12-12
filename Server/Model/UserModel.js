@@ -1,7 +1,10 @@
 const mongoose = require("mongoose")
 
 const UserSchema = new mongoose.Schema({
-    profile: String,
+    profile: {
+        type: String,
+        default: null
+    },
     name: String,
     email: String,
     password: String,
@@ -10,21 +13,25 @@ const UserSchema = new mongoose.Schema({
         type: Boolean,
         default: false
     },
-    groups: [{
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "group"
-    }],
+    groups: [
+        {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "Group",
+        }
+    ],
     users: [{
         type: mongoose.Schema.Types.ObjectId,
-        ref: "user"
+        ref: "User",
+
     }],
     aiChat: [
         {
             type: mongoose.Schema.Types.ObjectId,
-            ref: "aichat"
+            ref: "Aichat",
+            default: []
         }
     ]
 })
 
-const UserModel = mongoose.model("user", UserSchema)
+const UserModel = mongoose.model("User", UserSchema)
 module.exports = UserModel

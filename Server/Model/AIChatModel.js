@@ -13,6 +13,6 @@ const AiChatSchema=new mongoose.Schema({
     ]
 })
 
-const AiChatModel=mongoose.model("aichat",AiChatSchema)
+const AiChatModel=mongoose.model("Aichat",AiChatSchema)
 
 module.exports=AiChatModel
