@@ -6,29 +6,28 @@ import { getAllUsersApiCall } from "../../Redux/Actions/GetAllUserAction";
 import AddGroup from "../Popups/AddGroup";
 import AddUser from "../Popups/AddUser";
 const Home = () => {
-  const [typeOfPopup, setTypeOfPopup] = useState("");
-  const Dispatch = useDispatch()
+  const [typeOfPopup, setTypeOfPopup] = useState(null);
+  const Dispatch = useDispatch();
   // get all GroupUser  and get add user
-  const { AllUsers } = useSelector(state => state.GetAllUsers)
-  const [GroupUsers, setGroupUsers] = useState([])
-  const [getAddUser, setAddUser] = useState([])
+  const { AllUsers } = useSelector((state) => state.GetAllUsers);
+  const [GroupUsers, setGroupUsers] = useState([]);
+  const [getAddUser, setAddUser] = useState([]);
   useEffect(() => {
     if (typeOfPopup === "addGroup") {
-      Dispatch(getAllUsersApiCall("http://localhost:8000/user/getAllUser/All"))
+      Dispatch(getAllUsersApiCall("http://localhost:8000/user/getAllUser/All"));
+    } else if (typeOfPopup === "addUser") {
+      Dispatch(
+        getAllUsersApiCall("http://localhost:8000/user/getAllUser/user")
+      );
     }
-    else if (typeOfPopup === "addUser") {
-      Dispatch(getAllUsersApiCall("http://localhost:8000/user/getAllUser/user"))
-    }
-  }, [typeOfPopup])
+  }, [Dispatch, typeOfPopup]);
 
   useEffect(() => {
-    setGroupUsers(AllUsers)
-    setAddUser(AllUsers)
-  }, [AllUsers])
+    setGroupUsers(AllUsers);
+    setAddUser(AllUsers);
+  }, [AllUsers]);
 
   // get All groups and  get add user ends
-
-
 
   const PopupComponents = [
     {
