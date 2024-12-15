@@ -1,11 +1,27 @@
 import { memo, useEffect, useState } from "react";
-import SideBar from "../HelperPages/SideBar";
-// import ChatSection from "../HelperPages/ChatSection";
 import { useDispatch, useSelector } from "react-redux";
+import { useSearchParams } from "react-router-dom";
 import { getAllUsersApiCall } from "../../Redux/Actions/GetAllUserAction";
+import { getSelectedUserInfoApiCall } from "../../Redux/Actions/GetSelecteUserMessagesAction";
+import { getSideUserListApiCall } from "../../Redux/Actions/GetSideBarLastAction";
+import ChatSection from "../HelperPages/ChatSection";
+import SideBar from "../HelperPages/SideBar";
 import AddGroup from "../Popups/AddGroup";
 import AddUser from "../Popups/AddUser";
 const Home = () => {
+  // handling the search params
+  const [searchParams,] = useSearchParams()
+  const [showChatSection, setShowChatSection] = useState(false)
+  useEffect(() => {
+    const Id = searchParams.get('id');
+    if (Id) {
+      setShowChatSection(true)
+    }
+    else {
+      setShowChatSection(false)
+    }
+  }, [searchParams])
+  // end search params handling
   const [typeOfPopup, setTypeOfPopup] = useState(null);
   const Dispatch = useDispatch();
   // get all GroupUser  and get add user
@@ -25,10 +41,43 @@ const Home = () => {
   useEffect(() => {
     setGroupUsers(AllUsers);
     setAddUser(AllUsers);
-  }, [AllUsers]);
+  }, [AllUsers, Dispatch]);
 
   // get All groups and  get add user ends
 
+  // get SideBar Info
+  const { SideBarList } = useSelector(state => state.sideBarInfo)
+  const [SideBarInfo, setSideBarInfo] = useState([])
+
+  useEffect(() => {
+    Dispatch(getSideUserListApiCall())
+  }, [Dispatch])
+  useEffect(() => {
+    setSideBarInfo(SideBarList)
+  }, [SideBarList])
+
+  //  end of side bar info
+
+
+  // getting selected userInfo and messages
+
+  const [SelectedUserInfoMessages, setSelectedUserInfoMessages] = useState({})
+  const { SelectedUserInfo } = useSelector((state) => state.GetSelectedUserMessages)
+
+
+  useEffect(() => {
+    let selectedUserId = searchParams.get("id")
+    Dispatch(getSelectedUserInfoApiCall(selectedUserId))
+  }, [Dispatch, searchParams])
+
+  useEffect(() => {
+    setSelectedUserInfoMessages(SelectedUserInfo)
+  }, [SelectedUserInfo])
+
+  // get selected userinfo and messages Ends
+
+
+  // popup component Display Array
   const PopupComponents = [
     {
       title: "addUser",
@@ -75,21 +124,23 @@ const Home = () => {
           onAddGroup={() => {
             setTypeOfPopup("addGroup");
           }}
+          Info={SideBarInfo}
         />
       </div>
       {/* chat Page */}
       <div>
         {
-          <div className="w-[calc(100vw-24rem)] h-[calc(100vh-4.5rem)] bg-blue-200 flex flex-col justify-center items-center">
-            <h1 className="text-4xl font-semibold text-slate-600">
-              Start Chatting
-            </h1>
-            <p className="mt-4 text-base font-semibold text-gray-500">
-              Select some to chat
-            </p>
-          </div>
+          showChatSection ?
+            <ChatSection userInfoMessages={SelectedUserInfoMessages} /> :
+            <div className="w-[calc(100vw-24rem)] h-[calc(100vh-4.5rem)] bg-blue-200 flex flex-col justify-center items-center">
+              <h1 className="text-4xl font-semibold text-slate-600">
+                Start Chatting
+              </h1>
+              <p className="mt-4 text-base font-semibold text-gray-500">
+                Select some to chat
+              </p>
+            </div>
         }
-        {/* <ChatSection /> */}
       </div>
       {
         // popups

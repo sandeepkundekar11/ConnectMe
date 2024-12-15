@@ -2,6 +2,7 @@ const AsyncHandler = require("express-async-handler");
 const UserModel = require("../Model/UserModel");
 const GroupModel = require("../Model/GroupModel");
 const MessageModel = require("../Model/MessageModel");
+const ChatModel = require("../Model/ChatModel");
 
 // adding user for one to one chatting
 
@@ -26,7 +27,6 @@ const AddUser = AsyncHandler(async (req, res) => {
         },
       }
     );
-
     // updating the added user
 
     let UpdatedAddedUser = await UserModel.updateOne(
@@ -39,15 +39,37 @@ const AddUser = AsyncHandler(async (req, res) => {
     );
 
     if (UpdatePresentUser && UpdatedAddedUser) {
+      // update the ChatModel
+      let newChat = await ChatModel.create({
+        Members: [req.userId, UserIdToAddUser],
+        latestMessage: null
+      })
       return res.status(200).json({ message: "user added successfully" });
     }
-  } catch (error) {}
+  } catch (error) { }
 });
 
 // get user chats and available groups
 
 const GetAvailableChats = AsyncHandler(async (req, res) => {
   try {
+    // manupulate the user
+    let MessageProfile = (await ChatModel.find({ "Members": req.userId }).populate({
+      path: "Members",
+      model: "User",
+      select: "name profile"
+    })).map((ele) => {
+      if (!ele.isGroup) {
+        const otherUser = ele.Members.find((member) => member._id.toString() !== req.userId);
+        return {
+          ...ele.toObject(),
+          name: otherUser.name,
+          profile: otherUser.profile,
+          userId: otherUser._id
+        }
+      }
+    })
+    res.json(MessageProfile)
   } catch (error) {
     return res.status(500).json({ message: error.message });
   }
@@ -65,7 +87,19 @@ const SendMessage = AsyncHandler(async (req, res) => {
       sender: req.userId,
       receiver: receiverId,
     };
-    let createMaeesge = await MessageModel.create(message);
+    let createMessage = await MessageModel.create(message);
+
+    // also update the Chat model
+    let updateChat = await ChatModel.updateOne({
+      Members: {
+        $in: [req.userId, receiverId]
+      }
+    }, {
+      $set: {
+        latestMessage: content
+      }
+    })
+
 
     return res.status(200).json({ message: "message Sent successfully" });
   } catch (error) {
@@ -77,6 +111,8 @@ const SendMessage = AsyncHandler(async (req, res) => {
 const GetMessages = AsyncHandler(async (req, res) => {
   const { receiverId } = req.params;
   try {
+    // get the selected user profile name and status
+    let selectedUser = await UserModel.findOne({ _id: receiverId }, "profile name status")
     let Messages = await MessageModel.find({
       $or: [
         { sender: req.userId, receiver: receiverId },
@@ -86,13 +122,18 @@ const GetMessages = AsyncHandler(async (req, res) => {
       .populate({
         path: "sender",
         model: "User",
+        select: "profile, name"
       })
       .populate({
         path: "receiver",
         model: "User",
+        select: "profile, name"
       });
-
-    return res.status(200).json(Messages);
+    let userMessages = {
+      user: selectedUser,
+      messages: Messages
+    }
+    return res.status(200).json(userMessages);
   } catch (error) {
     return res.status(500).json({ message: error.message });
   }

@@ -13,7 +13,7 @@ const MessageSchema = new mongoose.Schema({
     time: {
         type: Date,
         default: Date.now
-    }
+    },
 })
 
 const MessageModel = mongoose.model("message", MessageSchema)
