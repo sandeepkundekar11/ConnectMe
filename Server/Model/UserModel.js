@@ -13,6 +13,10 @@ const UserSchema = new mongoose.Schema({
         type: Boolean,
         default: false
     },
+    status: {
+        type: String,
+        default: "Offline"
+    },
     groups: [
         {
             type: mongoose.Schema.Types.ObjectId,

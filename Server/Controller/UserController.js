@@ -2,6 +2,7 @@ const AsyncHandler = require("express-async-handler");
 const UserModel = require("../Model/UserModel");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
+const MessageModel = require("../Model/MessageModel");
 
 const SignupUser = AsyncHandler(async (req, res) => {
   const { name, email, password, privacy } = req.body;
@@ -103,6 +104,7 @@ const GetAllUser = AsyncHandler(async (req, res) => {
       .json({ message: "An error occurred", error: error.message });
   }
 });
+
 
 module.exports = {
   SignupUser,

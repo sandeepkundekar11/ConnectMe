@@ -17,7 +17,7 @@ const AddGroup = ({ onCancel,userData=[] }) => {
       };
     });
     setUsersData(users);
-  }, []);
+  }, [userData]);
 
   const onUserSelect = useCallback(
     (obj, index) => {

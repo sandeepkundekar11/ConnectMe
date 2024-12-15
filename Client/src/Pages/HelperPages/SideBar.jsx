@@ -1,8 +1,10 @@
+import { useSearchParams } from 'react-router-dom';
 import SidebarUserContact from "./SidebarUserContact";
-
 /* eslint-disable react/jsx-key */
 // eslint-disable-next-line react/prop-types
-const SideBar = ({ onAddGroup, onAddUser }) => {
+const SideBar = ({ onAddGroup, onAddUser, Info = [] }) => {
+
+  const [,setSearchParams]=useSearchParams()
   return (
     <div className="md:w-96 h-[calc(100vh-4.5rem)] bg-white md:static fixed top-[4.5rem] w-full border-t border shadow-xl z-40 ">
       {/* head */}
@@ -65,8 +67,15 @@ const SideBar = ({ onAddGroup, onAddUser }) => {
       </div>
       {/* added User and Groups will be listed Here */}
       <div className="mt-3">
-        {[1, 2, 3, 4].map(() => {
-          return <SidebarUserContact />;
+        {Info.map((ele) => {
+          return <SidebarUserContact
+            message={ele?.latestMessage}
+            name={ele?.name}
+            profle={ele?.profle}
+            onClick={()=>{
+              setSearchParams({id:ele?.userId})
+            }}
+          />;
         })}
       </div>
     </div>

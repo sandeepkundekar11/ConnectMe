@@ -1,33 +1,39 @@
 import { useEffect, useRef } from "react";
 import UserStatus from "./UserStatus";
 
-const ChatSection = () => {
-  const messageContainerRef=useRef()
+// eslint-disable-next-line react/prop-types
+const ChatSection = ({ userInfoMessages = {} }) => {
+  const messageContainerRef = useRef()
   const InputRef = useRef()
   const onInputChange = () => {
     InputRef.current.style.height = "auto"
     InputRef.current.style.height = `${InputRef.current.scrollHeight}px`
   }
 
-  useEffect(()=>
-  {
-    if(messageContainerRef.current)
-    {
-      messageContainerRef.current.scrollTop=messageContainerRef.current.scrollHeight
+  useEffect(() => {
+    if (messageContainerRef.current) {
+      messageContainerRef.current.scrollTop = messageContainerRef.current.scrollHeight
     }
-    
-  },[])
 
-  
+  }, [])
+
+
   return (
     <div className="w-[calc(100vw-24rem)] h-[calc(100vh-4.5rem)]  relative">
       {/* user Head */}
       <div className="w-[calc(100vw-24rem)] h-20  bg-white  flex justify-start items-center fixed top-[4.5rem]">
-        <UserStatus />
+        <UserStatus info={{ name: userInfoMessages.user.name, status: userInfoMessages.user.status, profile: userInfoMessages.user.profile }} />
       </div>
       {/* all chat Container */}
-      <div className="h-[calc(100%-4.5rem)] w-full bg-blue-200 flex flex-col overflow-scroll" ref={messageContainerRef}>
-      
+      <div className="h-[calc(100%-4.5rem)] w-full bg-blue-200 flex  flex-col-reverse overflow-scroll" ref={messageContainerRef}>
+        {
+          userInfoMessages?.messages.map((message) => {
+            return (
+              // eslint-disable-next-line react/jsx-key
+              <div className="">{message.content}</div>
+            )
+          })
+        }
       </div>
       {/* send message bottom bar */}
       <div className="fixed bottom-0 w-[calc(100vw-24rem)] h-auto  bg-white shadow-md flex justify-center items-end py-4">
