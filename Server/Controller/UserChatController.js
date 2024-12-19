@@ -54,7 +54,11 @@ const AddUser = AsyncHandler(async (req, res) => {
 const GetAvailableChats = AsyncHandler(async (req, res) => {
   try {
     // manupulate the user
-    let MessageProfile = (await ChatModel.find({ "Members": req.userId }).populate({
+    let MessageProfile = (await ChatModel.find({
+      Members: {
+        $in: [req.userId]
+      }
+    }).populate({
       path: "Members",
       model: "User",
       select: "name profile"
@@ -88,6 +92,14 @@ const SendMessage = AsyncHandler(async (req, res) => {
       receiver: receiverId,
     };
     let createMessage = await MessageModel.create(message);
+
+    // check if chat is available with given users
+
+    let isChatAvailable = await ChatModel.findOne({
+      Members: {
+        $in: [req.userId, receiverId]
+      }
+    })
 
     // also update the Chat model
     let updateChat = await ChatModel.updateOne({

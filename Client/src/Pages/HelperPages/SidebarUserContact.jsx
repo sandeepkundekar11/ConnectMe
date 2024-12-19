@@ -1,7 +1,8 @@
+/* eslint-disable no-unused-vars */
 // eslint-disable-next-line react/prop-types
-const SidebarUserContact = ({ name, message, profle,onClick }) => {
+const SidebarUserContact = ({ name, message, profle, onClick, SelectedUserID, userId }) => {
   return (
-    <div className="flex mt-2 hover:bg-slate-300 w-full  cursor-pointer px-4 py-2" onClick={onClick}>
+    <div className={`flex pt-2 hover:bg-slate-100 w-full  cursor-pointer px-4 py-2 ${userId === SelectedUserID && "bg-slate-200"}`} onClick={onClick}>
       <div className="w-14 h-14 bg-slate-600 rounded-lg">
         <img className="w-full h-full rounded-lg" src={profle} alt="" />
       </div>

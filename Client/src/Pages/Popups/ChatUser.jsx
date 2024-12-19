@@ -2,7 +2,8 @@ import { useEffect, useRef, useState } from "react";
 import { BsThreeDots } from "react-icons/bs";
 import { MdOutlineMessage } from "react-icons/md";
 
-const ChatUser = () => {
+// eslint-disable-next-line react/prop-types
+const ChatUser = ({ userName, OnStartChatting }) => {
     const [showPopup, setShowPopup] = useState(false);
     const popupRef = useRef(null);
 
@@ -20,17 +21,21 @@ const ChatUser = () => {
 
     return (
         <div className="flex w-full p-1 relative">
-            <img className="w-12 h-12 bg-slate-500 rounded-md" src="" alt="User" />
-            <h1 className="text-sm ml-2 font-semibold text-gray-500">
-                Sandeep N Kundekar
-            </h1>
-            <button
-                className={`w-10 h-10 flex items-center ml-12 rounded-full hover:bg-blue-100 ${showPopup ? "bg-blue-100" : ""
-                    }`}
-                onClick={() => setShowPopup(!showPopup)}
-            >
-                <BsThreeDots className="w-12 h-6" />
-            </button>
+            <div className="flex justify-between">
+                <div className="w-56 flex">
+                    <img className="w-12 h-12 bg-slate-500 rounded-md" src="" alt="User" />
+                    <h1 className="text-sm ml-2 w-1/2 font-semibold text-gray-500">
+                        {userName}
+                    </h1>
+                </div>
+                <button
+                    className={`w-10 h-10 flex items-center ml-12 rounded-full hover:bg-blue-100 ${showPopup ? "bg-blue-100" : ""
+                        }`}
+                    onClick={() => setShowPopup(!showPopup)}
+                >
+                    <BsThreeDots className="w-12 h-6" />
+                </button>
+            </div>
             {/* popup */}
             {showPopup && (
                 <div
@@ -40,7 +45,7 @@ const ChatUser = () => {
                     {/* popup */}
                     <div className="flex items-center">
                         <MdOutlineMessage />
-                        <p className="text-sm  ml-3">Start Chating</p>
+                        <p className="text-sm  ml-3" onClick={OnStartChatting}>Add User</p>
                     </div>
                 </div>
             )}

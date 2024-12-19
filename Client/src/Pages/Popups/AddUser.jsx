@@ -2,10 +2,17 @@
 import { CiSearch } from "react-icons/ci";
 
 import { MdOutlineCancel } from "react-icons/md";
+import { useDispatch } from "react-redux";
+import AllTosters from "../../Logic/TosterLogic";
+import { AddUserApiCall } from "../../Redux/Actions/AddUserAction";
 import ChatUser from "./ChatUser";
 import PopupProvider from "./PopUpProvider";
 
-const AddUser = ({ onCancel,Users=[] }) => {
+const AddUser = ({ onCancel, Users = [] }) => {
+
+  const { SuccessToster } = AllTosters()
+  // calling the add UserInfo
+  const Dispatch = useDispatch()
   return (
     <PopupProvider>
       <div className="w-96 h-[450px] bg-white rounded-md shadow-lg relative p-4">
@@ -33,7 +40,10 @@ const AddUser = ({ onCancel,Users=[] }) => {
           {/* user List */}
           <div className="overflow-auto h-80 mt-2">
             {Users?.map((ele, index) => {
-              return <ChatUser key={index} />;
+              return <ChatUser key={index} userName={ele?.name} OnStartChatting={() => {
+                Dispatch(AddUserApiCall(ele?._id,SuccessToster,onCancel))
+
+              }} />;
             })}
           </div>
         </div>
