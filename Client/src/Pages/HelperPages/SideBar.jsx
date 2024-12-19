@@ -1,10 +1,16 @@
+import { useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import SidebarUserContact from "./SidebarUserContact";
 /* eslint-disable react/jsx-key */
 // eslint-disable-next-line react/prop-types
-const SideBar = ({ onAddGroup, onAddUser, Info = [] }) => {
+const SideBar = ({ onAddGroup, onAddUser, Info = [], SelectedUserID }) => {
 
-  const [,setSearchParams]=useSearchParams()
+  const [, setSearchParams] = useSearchParams()
+  const [SearchUser, SetSearchUser] = useState("")
+  const [USerInfo, SetUserInfo] = useState([])
+  useEffect(() => {
+    SetUserInfo(Info)
+  }, [Info])
   return (
     <div className="md:w-96 h-[calc(100vh-4.5rem)] bg-white md:static fixed top-[4.5rem] w-full border-t border shadow-xl z-40 ">
       {/* head */}
@@ -63,17 +69,25 @@ const SideBar = ({ onAddGroup, onAddUser, Info = [] }) => {
           name=""
           placeholder="Search Contact / Chats"
           id=""
+          onChange={(e) => SetSearchUser(e.target.value)}
         />
       </div>
       {/* added User and Groups will be listed Here */}
       <div className="mt-3">
-        {Info.map((ele) => {
+        {USerInfo.filter((ele) => {
+          if (SearchUser === "") {
+            return ele
+          }
+          return ele?.name?.includes(SearchUser.toLowerCase())
+        }).map((ele) => {
           return <SidebarUserContact
+            SelectedUserID={SelectedUserID}
             message={ele?.latestMessage}
             name={ele?.name}
             profle={ele?.profle}
-            onClick={()=>{
-              setSearchParams({id:ele?.userId})
+            userId={ele?.userId}
+            onClick={() => {
+              setSearchParams({ id: ele?.userId })
             }}
           />;
         })}

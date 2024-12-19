@@ -12,8 +12,10 @@ const Home = () => {
   // handling the search params
   const [searchParams,] = useSearchParams()
   const [showChatSection, setShowChatSection] = useState(false)
+  const [SelectedUserId,setSelectedUserId]=useState("")
   useEffect(() => {
     const Id = searchParams.get('id');
+    setSelectedUserId(Id)
     if (Id) {
       setShowChatSection(true)
     }
@@ -77,6 +79,8 @@ const Home = () => {
   // get selected userinfo and messages Ends
 
 
+ 
+
   // popup component Display Array
   const PopupComponents = [
     {
@@ -125,13 +129,14 @@ const Home = () => {
             setTypeOfPopup("addGroup");
           }}
           Info={SideBarInfo}
+          SelectedUserID={SelectedUserId}
         />
       </div>
       {/* chat Page */}
       <div>
         {
           showChatSection ?
-            <ChatSection userInfoMessages={SelectedUserInfoMessages} /> :
+            <ChatSection userInfoMessages={SelectedUserInfoMessages} ReceiverId={SelectedUserId}/> :
             <div className="w-[calc(100vw-24rem)] h-[calc(100vh-4.5rem)] bg-blue-200 flex flex-col justify-center items-center">
               <h1 className="text-4xl font-semibold text-slate-600">
                 Start Chatting
