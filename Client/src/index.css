@@ -6,6 +6,10 @@
   margin: 0;
   padding: 0;
 }
+.chatContainer
+{
+  overflow: scroll !important;
+}
 
 ::-webkit-scrollbar {
   width: 10px; /* Width of the scrollbar */

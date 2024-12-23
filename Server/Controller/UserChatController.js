@@ -42,11 +42,11 @@ const AddUser = AsyncHandler(async (req, res) => {
       // update the ChatModel
       let newChat = await ChatModel.create({
         Members: [req.userId, UserIdToAddUser],
-        latestMessage: null
-      })
+        latestMessage: null,
+      });
       return res.status(200).json({ message: "user added successfully" });
     }
-  } catch (error) { }
+  } catch (error) {}
 });
 
 // get user chats and available groups
@@ -54,26 +54,31 @@ const AddUser = AsyncHandler(async (req, res) => {
 const GetAvailableChats = AsyncHandler(async (req, res) => {
   try {
     // manupulate the user
-    let MessageProfile = (await ChatModel.find({
-      Members: {
-        $in: [req.userId]
-      }
-    }).populate({
-      path: "Members",
-      model: "User",
-      select: "name profile"
-    })).map((ele) => {
+    let MessageProfile = (
+      await ChatModel.find({
+        Members: {
+          $in: [req.userId],
+        },
+      }).populate({
+        path: "Members",
+        model: "User",
+        select: "name profile",
+      })
+    ).map((ele) => {
       if (!ele.isGroup) {
-        const otherUser = ele.Members.find((member) => member._id.toString() !== req.userId);
+        const otherUser = ele.Members.find(
+          (member) => member._id.toString() !== req.userId
+        );
         return {
           ...ele.toObject(),
           name: otherUser.name,
           profile: otherUser.profile,
-          userId: otherUser._id
-        }
+          userId: otherUser._id,
+        };
       }
-    })
-    res.json(MessageProfile)
+    });
+    res.json(MessageProfile);
+    console.log("hello", MessageProfile);
   } catch (error) {
     return res.status(500).json({ message: error.message });
   }
@@ -97,21 +102,31 @@ const SendMessage = AsyncHandler(async (req, res) => {
 
     let isChatAvailable = await ChatModel.findOne({
       Members: {
-        $in: [req.userId, receiverId]
-      }
-    })
+        $all: [req.userId, receiverId],
+      },
+    });
 
-    // also update the Chat model
-    let updateChat = await ChatModel.updateOne({
-      Members: {
-        $in: [req.userId, receiverId]
-      }
-    }, {
-      $set: {
-        latestMessage: content
-      }
-    })
-
+    if (isChatAvailable) {
+      // also update the Chat model
+      let updateChat = await ChatModel.updateOne(
+        {
+          Members: {
+            $all: [req.userId, receiverId],
+          },
+        },
+        {
+          $set: {
+            latestMessage: content,
+          },
+        }
+      );
+    } else {
+      console.log("creating new");
+      let newChat = await ChatModel.create({
+        Members: [req.userId, receiverId],
+        latestMessage: content,
+      });
+    }
 
     return res.status(200).json({ message: "message Sent successfully" });
   } catch (error) {
@@ -124,7 +139,10 @@ const GetMessages = AsyncHandler(async (req, res) => {
   const { receiverId } = req.params;
   try {
     // get the selected user profile name and status
-    let selectedUser = await UserModel.findOne({ _id: receiverId }, "profile name status")
+    let selectedUser = await UserModel.findOne(
+      { _id: receiverId },
+      "profile name status"
+    );
     let Messages = await MessageModel.find({
       $or: [
         { sender: req.userId, receiver: receiverId },
@@ -134,17 +152,17 @@ const GetMessages = AsyncHandler(async (req, res) => {
       .populate({
         path: "sender",
         model: "User",
-        select: "profile, name"
+        select: "profile, name",
       })
       .populate({
         path: "receiver",
         model: "User",
-        select: "profile, name"
+        select: "profile, name",
       });
     let userMessages = {
       user: selectedUser,
-      messages: Messages
-    }
+      messages: Messages,
+    };
     return res.status(200).json(userMessages);
   } catch (error) {
     return res.status(500).json({ message: error.message });
